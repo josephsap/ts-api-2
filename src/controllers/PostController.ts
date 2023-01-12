@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { Post } from '../entities/Post.entity';
-import { createPost, getAllPosts, getSinglePost, deletePost } from '../services/post.service';
+import { createPost, getAllPosts, getSinglePost, deletePost, updatePost } from '../services/post.service';
 
 export const handleCreatePost = async(req: Request<{}, {}, Post>, res: Response, next: NextFunction) => {
   try {
@@ -56,11 +56,25 @@ export const handleDeletePost = async(req: Request, res: Response, next: NextFun
     console.log(err.message);
     next(err);
   }
-
-    //   const results = await myDataSource.getRepository(User).delete(req.params.id)
-    // return res.send(results)
 };
 
-// export const handleUpdatePost = async() => {
-//   console.log('hi')
-// }
+export const handleUpdatePost = async(req: Request, res: Response, next: NextFunction) => {
+  try {
+    const post = await(getSinglePost(req.params.id));
+    if (!post) {
+      return next(new Error('Post with that ID not found'));
+    }
+
+    const updatedPost = await updatePost({...post, ...req.body});
+    
+    res.status(200).json({
+      status: 'success',
+      data: {
+        updatedPost,
+      },
+    });
+  } catch(err: any) {
+    console.log(err.message);
+    next(err);
+  }
+};

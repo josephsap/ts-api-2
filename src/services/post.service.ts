@@ -8,8 +8,7 @@ export const createPost = async (input: Partial<Post>) => {
 };
 
 export const getAllPosts = async () => {
-  const allPosts = await postRepository.find();
-  return allPosts;
+  return await postRepository.find();
 };
 
 export const getSinglePost = async (postId: string) => {
@@ -20,6 +19,6 @@ export const deletePost = async (postId: string) => {
   return await postRepository.delete(postId);
 }
 
-// export const updatePost = async(input: Partial<Post>) => {
-//   return await postRepository.save(postRepository.patch({...input}));
-// };
+export const updatePost = async(input: Partial<Post>) => {
+  return await postRepository.save({...input});
+};
