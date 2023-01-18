@@ -1,10 +1,11 @@
 import { Post } from '../entities/Post.entity';
+import { User } from '../entities/User.entity';
 import { AppDataSource } from '../data-source';
 
 const postRepository = AppDataSource.getRepository(Post);
 
-export const createPost = async (input: Partial<Post>) => {
-  return await postRepository.save(postRepository.create({ ...input }));
+export const createPost = async (input: Partial<Post>, user: User) => {
+  return await postRepository.save(postRepository.create({ ...input, user }));
 };
 
 export const getAllPosts = async () => {

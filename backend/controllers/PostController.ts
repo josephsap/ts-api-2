@@ -1,10 +1,18 @@
 import { NextFunction, Request, Response } from 'express';
 import { Post } from '../entities/Post.entity';
 import { createPost, getAllPosts, getSinglePost, deletePost, updatePost } from '../services/post.service';
+import { getUserByName } from '../services/user.service';
 
-export const handleCreatePost = async(req: Request<{}, {}, Post>, res: Response, next: NextFunction) => {
+interface GetByNameQuery {
+  name: string;
+}
+
+export const handleCreatePost = async(req: Request<GetByNameQuery, {}, Post>, res: Response, next: NextFunction) => {
+  // example url to create a post associated with a user:
+  // http://localhost:3000/api/posts/create?name=snoopy
   try {
-    const post = await createPost(req.body);
+    const user = await getUserByName(req.params.name);
+    const post = await createPost(req.body, user!);
     res.status(201).json({
       status: 'success',
       data: {

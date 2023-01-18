@@ -1,26 +1,52 @@
-import { getRepository } from "typeorm"
 import { NextFunction, Request, Response } from "express"
-import { User } from "../entities/User.entity"
+import { User } from '../entities/User.entity';
+import { createUser,getAllUsers, getUserByName } from '../services/user.service';
 
-export class UserController {
-
-    private userRepository = getRepository(User)
-
-    async all(request: Request, response: Response, next: NextFunction) {
-        return this.userRepository.find()
-    }
-
-    async one(request: Request, response: Response, next: NextFunction) {
-        return this.userRepository.findOne(request.params.id)
-    }
-
-    async save(request: Request, response: Response, next: NextFunction) {
-        return this.userRepository.save(request.body)
-    }
-
-    async remove(request: Request, response: Response, next: NextFunction) {
-        let userToRemove = await this.userRepository.findOneBy({ id: request.params.id })
-        await this.userRepository.remove(userToRemove)
-    }
-
+interface GetByNameQuery {
+  name: string;
 }
+
+export const handleGetAllUsers = async(req: Request, res: Response, next: NextFunction) => {
+  try {
+    const users = await(getAllUsers());
+    res.status(201).json({
+      status: 'success',
+      data: {
+        users,
+      },
+    });
+  } catch(err: any) {
+    next(err);
+  }
+};
+
+export const handleCreateUser = async(req: Request<{}, {}, User>, res: Response, next: NextFunction) => {
+  try {
+    const user = await(createUser(req.body));
+    res.status(201).json({
+      status: 'success',
+      data: {
+        user,
+      },
+    });
+  } catch(err: any) {
+    next(err);
+  };
+};
+
+export const handleGetUserByName = async(req: Request<GetByNameQuery, {}, {}>, res: Response, next: NextFunction) => {
+  try {
+    const user = await(getUserByName(req.params.name));
+    if (!user) {
+      return next(new Error('User with that name not found'));
+    }
+    res.status(201).json({
+      status: 'success',
+      data: {
+        user,
+      },
+    });
+  } catch(err: any) {
+    next(err);
+  }
+};

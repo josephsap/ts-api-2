@@ -2,6 +2,8 @@ import * as bodyParser from "body-parser"
 import express, { Request, Response } from "express"
 import { AppDataSource } from "./data-source"
 import postRouter from './routes/post.routes';
+import stocksRouter from './routes/stocks.routes';
+import usersRouter from './routes/users.routes';
 
 AppDataSource.initialize().then(async () => {
 
@@ -16,6 +18,8 @@ AppDataSource.initialize().then(async () => {
     });
 
     app.use('/api/posts', postRouter);
+    app.use('/stocks', stocksRouter);
+    app.use('/users', usersRouter);
     // await AppDataSource.manager.save(
     //     AppDataSource.manager.create(User, {
     //         firstName: "2345pppTimber",

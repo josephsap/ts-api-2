@@ -1,19 +1,30 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
 import Model from './Model.entity';
+import { Post } from "./Post.entity";
 
-@Entity()
+type UserRoleType = 'admin' | 'regular';
+@Entity('users')
 export class User extends Model {
 
     @PrimaryGeneratedColumn()
-    id: number
+    id: string
 
-    @Column()
-    firstName: string
-
-    @Column()
-    lastName: string
+    @Column({ unique: true })
+    name: string
 
     @Column()
     age: number
+
+    @Column({
+        type: 'enum',
+        enum: ['admin', 'regular'],
+        default: 'regular'
+    })
+    role: UserRoleType;
+        
+    // A user can create many posts but a post
+    // can only belong to one user.
+    @OneToMany(() => Post, (post) => post.user)
+    posts: Post[];
 
 }
