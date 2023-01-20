@@ -20,6 +20,6 @@ export const deletePost = async (postId: string) => {
   return await postRepository.delete(postId);
 }
 
-export const updatePost = async(input: Partial<Post>) => {
+export const updatePost = async (input: Partial<Post>) => {
   return await postRepository.save({...input});
 };

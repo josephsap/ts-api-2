@@ -5,10 +5,6 @@ import { Post } from "./Post.entity";
 type UserRoleType = 'admin' | 'regular';
 @Entity('users')
 export class User extends Model {
-
-    @PrimaryGeneratedColumn()
-    id: string
-
     @Column({ unique: true })
     name: string
 
@@ -16,15 +12,14 @@ export class User extends Model {
     age: number
 
     @Column({
-        type: 'enum',
-        enum: ['admin', 'regular'],
-        default: 'regular'
+    type: 'enum',
+    enum: ['admin', 'regular'],
+    default: 'regular'
     })
     role: UserRoleType;
-        
+
     // A user can create many posts but a post
     // can only belong to one user.
-    @OneToMany(() => Post, (post) => post.user)
-    posts: Post[];
-
+    @OneToMany(() => Post, (post: Post) => post.user)
+    posts!: Array<Post>;
 }

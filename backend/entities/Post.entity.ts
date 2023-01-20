@@ -4,9 +4,6 @@ import { User } from './User.entity';
 
 @Entity('posts')
 export class Post extends Model {
-  @PrimaryGeneratedColumn()
-  id: string;
-
   @Column({
     length: 100,
     unique: true
@@ -16,7 +13,7 @@ export class Post extends Model {
   @Column('text')
   content: string;
 
-  @ManyToOne(() => User, (user) => user.posts)
-  @JoinColumn({ referencedColumnName: 'name' })
-  user: User;
+  @ManyToOne(() => User, (user: User) => user.posts)
+  @JoinColumn()
+  user!: User; // ! means it can be undefined if it's not assigned in the constructor.
 }

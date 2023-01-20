@@ -1,7 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
 import { Post } from '../entities/Post.entity';
 import { createPost, getAllPosts, getSinglePost, deletePost, updatePost } from '../services/post.service';
-import { getUserByName } from '../services/user.service';
+import { getUserByName, getPostsByUser } from '../services/user.service';
+
 
 interface GetByNameQuery {
   name: string;
@@ -83,6 +84,26 @@ export const handleUpdatePost = async(req: Request, res: Response, next: NextFun
     });
   } catch(err: any) {
     console.log(err.message);
+    next(err);
+  }
+};
+
+export const handleGetPostsByUser = async(req: Request<GetByNameQuery, {}, {}>, res: Response, next: NextFunction) => {
+  try {
+    const user = await getUserByName(req.params.name);
+    if (!user) {
+      return next(new Error('User not found.'));
+    }
+    
+    const posts = await getPostsByUser(user.id);
+
+    res.status(201).json({
+      status: 'success',
+      data: {
+        posts,
+      },
+    });
+  } catch(err: any) {
     next(err);
   }
 };

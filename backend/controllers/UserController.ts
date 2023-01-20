@@ -36,7 +36,7 @@ export const handleCreateUser = async(req: Request<{}, {}, User>, res: Response,
 
 export const handleGetUserByName = async(req: Request<GetByNameQuery, {}, {}>, res: Response, next: NextFunction) => {
   try {
-    const user = await(getUserByName(req.params.name));
+    const user = await getUserByName(req.params.name);
     if (!user) {
       return next(new Error('User with that name not found'));
     }

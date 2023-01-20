@@ -16,3 +16,14 @@ export const createUser = async (input: Partial<User>) => {
 export const getUserByName = async(name: string) => {
   return await userRepository.findOneBy({ name });
 }
+
+export const getPostsByUser = async (userId: string) => {
+  return await userRepository.find({
+    where: {
+      id: userId
+    },
+    relations: {
+      posts: true
+    }
+  });
+};
