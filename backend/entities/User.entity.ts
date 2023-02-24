@@ -1,25 +1,36 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
+import { Entity, Column, OneToMany, OneToOne, JoinColumn } from "typeorm";
 import Model from './Model.entity';
 import { Post } from "./Post.entity";
+import { Portfolio } from './Portfolio.entity';
+// import {IsInt, IsEnum, Min, Max} from 'class-validator';
 
-type UserRoleType = 'admin' | 'regular';
+enum UserRoleType { ADMIN = 'admin', REGULAR = 'regular' };
 @Entity('users')
 export class User extends Model {
-    @Column({ unique: true })
-    name: string
+  @Column({ unique: true })
+  name: string
 
-    @Column()
-    age: number
+  @Column()
+  // @IsInt()
+  // @Min(0)
+  // @Max(123)
+  age: number
 
-    @Column({
+  // @IsEnum(UserRoleType)
+  @Column({
     type: 'enum',
-    enum: ['admin', 'regular'],
-    default: 'regular'
-    })
-    role: UserRoleType;
+    enum: UserRoleType,
+    default: UserRoleType.REGULAR,
+    nullable: true
+  })
+  role: UserRoleType;
 
-    // A user can create many posts but a post
-    // can only belong to one user.
-    @OneToMany(() => Post, (post: Post) => post.user)
-    posts!: Array<Post>;
+  // A user can create many posts but a post
+  // can only belong to one user.
+  @OneToMany(() => Post, (post: Post) => post.user)
+  posts!: Array<Post>;
+
+  @OneToOne(() => Portfolio, (portfolio: Portfolio) => portfolio.user)
+  @JoinColumn()
+  portfolio!: Portfolio
 }

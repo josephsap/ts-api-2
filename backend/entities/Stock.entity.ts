@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryColumn } from 'typeorm';
 
-@Entity()
+@Entity('stocks')
 export class Stock {
   @Column()
   date: string
@@ -11,6 +11,9 @@ export class Stock {
   @Column()
   close: string
 
-  @PrimaryColumn()
+  @Column()
   name: string
+
+  @PrimaryColumn()
+  id: string;
 }

@@ -1,8 +1,9 @@
-import express from 'express';
-import { handleGetAllStocks } from '../controllers/StocksController';
+import express, { Router } from 'express';
+import { handleGetStockOnDate, handleGetAllStocks } from '../controllers/StocksController';
 
-const router = express.Router();
+const router: Router = express.Router();
 
-router.route('/').get(handleGetAllStocks); // limit 50, paginate with query params
+router.route('/').get(handleGetStockOnDate); 
+router.route('/all').get(handleGetAllStocks);
 
 export default router;

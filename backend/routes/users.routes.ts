@@ -1,7 +1,7 @@
-import express from 'express';
+import express, { Router } from 'express';
 import { handleGetAllUsers, handleCreateUser, handleGetUserByName } from '../controllers/UserController';
 
-const router = express.Router();
+const router: Router = express.Router();
 
 router.route('/').get(handleGetAllUsers);
 router.route('/name').get(handleGetUserByName);

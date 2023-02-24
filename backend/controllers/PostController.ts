@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { Post } from '../entities/Post.entity';
 import { createPost, getAllPosts, getSinglePost, deletePost, updatePost } from '../services/post.service';
 import { getUserByName, getPostsByUser } from '../services/user.service';
+// import { validate } from 'class-validator';
 
 
 interface GetByNameQuery {
@@ -14,12 +15,23 @@ export const handleCreatePost = async(req: Request<GetByNameQuery, {}, Post>, re
   try {
     const user = await getUserByName(req.params.name);
     const post = await createPost(req.body, user!);
+    // const errors = await validate(post);
     res.status(201).json({
       status: 'success',
       data: {
         post,
       },
     });
+    // if (errors.length > 0) {
+    //   throw 400;
+    // } else {
+    //   res.status(201).json({
+    //     status: 'success',
+    //     data: {
+    //       post,
+    //     },
+    //   });
+    // }
   } catch(err: any) {
     console.log(err, 'erorr creating post');
     next(err);
