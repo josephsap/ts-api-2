@@ -5,22 +5,22 @@ import { AppDataSource } from '../data-source';
 const stockRepository = AppDataSource.getRepository(Stock);
 
 export const getStockByNameAndDate = async(name: string, date: string) => {
-  console.log('in stock svc')
-  return await stockRepository.findOneBy({
-    name, date
+  return await stockRepository.findOne({
+    where: {
+      name: name.toUpperCase(),
+      date: date
+    },
   });
 };
 
 export const getAllStocks = async(take: number = 20, skip: number = 1) => {
-  // const perPage = take || 20;
-  // const toSkip = skip || 0;
   return await stockRepository.find({ take, skip });
 };
-  // return await stockRepository.createQueryBuilder('stocks').getMany();
-  // return await stockRepository.createQueryBuilder('stocks')
-  //   .where('stock.name = :name', { name: name })
-  //   .getOne();
-  
-  
-  
-  // .select('stock').from(Stock, 'stock').where('stock.name = :name', { name: name }).getOne();
+
+export const listTickers = async(take: number = 50, skip: number = 1) => {
+  return await stockRepository.createQueryBuilder('stock')
+    .select(['stock.name'])
+    // .skip(skip)
+    // .take(take)
+    .getMany();
+};

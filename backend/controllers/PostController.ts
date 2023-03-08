@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from 'express';
+import type { NextFunction, Request, Response } from 'express';
 import { Post } from '../entities/Post.entity';
 import { createPost, getAllPosts, getSinglePost, deletePost, updatePost } from '../services/post.service';
 import { getUserByName, getPostsByUser } from '../services/user.service';
