@@ -42,12 +42,15 @@ export const handleGetAllStocks = async(req: Request<{}, {}, {},  PaginateQuery>
 
 export const handleListTickers = async(req: Request<{}, {}, {},  PaginateQuery>, res: Response, next: NextFunction) => {
   try {
-    const stocks = await listTickers(req.query.take, req.query.skip);
-    // need to remove duplicates then send. data should be array of tickers.
+    const results = await listTickers();
+    const tickersList = results.map(item => item.name);
+    const tickersUnique = [...new Set(tickersList)];
+    tickersUnique.shift();
+
      res.status(200).json({
       status: 'success',
       data: {
-        stocks,
+        tickersUnique
       },
     });
   } catch (err: any) {

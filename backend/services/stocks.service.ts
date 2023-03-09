@@ -17,10 +17,8 @@ export const getAllStocks = async(take: number = 20, skip: number = 1) => {
   return await stockRepository.find({ take, skip });
 };
 
-export const listTickers = async(take: number = 50, skip: number = 1) => {
+export const listTickers = async() => {
   return await stockRepository.createQueryBuilder('stock')
     .select(['stock.name'])
-    // .skip(skip)
-    // .take(take)
     .getMany();
 };
